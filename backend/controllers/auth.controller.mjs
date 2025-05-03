@@ -1,7 +1,6 @@
 export const signup = async (req, res) => {
-  res.json({
-    data: "you are in login router",
-  });
+  try {
+  } catch (error) {}
 };
 
 export const login = async (req, res) => {
