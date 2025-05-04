@@ -24,10 +24,10 @@ jobs:
           version: "18"
 
       - name: install frontend dependancies
-        uses: npm i
+        run: npm i
 
       - name: build frontend
-        uses: npn run build
+        run: npn run build
 
       - name: run test
-        uses: npm test
+        run: npm test
