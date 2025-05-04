@@ -6,23 +6,9 @@ export const getUserProfile = async (req, res) => {
 
   try {
     const user = await User.findOne({ username }).select("-password");
+    if (!user) return req.status(404).json({ error: "User not found" });
 
-    if (!user) {
-      return req.status(404).json({ error: "User not found" });
-    }
-
-    res.status(201).json({
-      _id: newUser._id,
-      fullname: newUser.fullname,
-      username: newUser.username,
-      email: newUser.email,
-      followers: newUser.followers,
-      following: newUser.following,
-      profileImg: newUser.profileImg,
-      coverImg: newUser.coverImg,
-      bio: newUser.bio,
-      link: newUser.link,
-    });
+    res.status(201).json(user);
   } catch (error) {
     console.log(`error in userController ${error.message}`);
     req.status(500).json({ error: "internal server error on getUserProfile" });
