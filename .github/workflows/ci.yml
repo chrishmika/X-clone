@@ -1,0 +1,78 @@
+name: CI for backend
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: ./backend
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18"
+
+      - name: Insall dependancies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+##########
+##########
+##########
+##########
+##explanation of this code is here
+##########
+####
+##
+#         # This is the name of the workflow. It will appear in the GitHub "Actions" tab.
+# name: CI for Backend
+
+# # This defines when the workflow should run.
+# # Here, it runs whenever you push to "main" or create a pull request to "main".
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+
+# # Define the job to run — a job is a group of steps that run on the same machine.
+# jobs:
+#   build-and-test:               # You can name this job anything.
+#     runs-on: ubuntu-latest      # The job runs on a fresh Ubuntu virtual machine provided by GitHub.
+
+#     # This sets the default folder for all steps below.
+#     # All commands will run inside the "backend" folder by default.
+#     defaults:
+#       run:
+#         working-directory: ./backend
+
+#     steps:
+#       # Step 1: Checkout the code from your GitHub repo so we can work with it.
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+
+#       # Step 2: Set up Node.js on the virtual machine (for your backend code).
+#       - name: Set up Node.js
+#         uses: actions/setup-node@v3
+#         with:
+#           node-version: '18'   # This sets Node.js version to 18 (you can change if needed)
+
+#       # Step 3: Install the backend project dependencies using npm.
+#       - name: Install dependencies
+#         run: npm install       # Same as you running "npm install" locally
+
+#       # Step 4: Run your backend tests (defined in package.json under "scripts").
+#       - name: Run tests
+#         run: npm test          # Same as you running "npm test" locally
