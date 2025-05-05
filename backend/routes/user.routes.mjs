@@ -6,10 +6,10 @@ const userRouter = express.Router();
 
 userRouter.get("/profile/:username", protectRoute, getUserProfile);
 
-userRouter.get("/suggested", protectRoute, getUserProfile);
+//userRouter.get("/suggested", protectRoute, getUserProfile);
 
 userRouter.post("/follow/:id", protectRoute, followUnfollowUser);
 
-userRouter.post("/update", protectRoute, updateUserProfile);
+//userRouter.post("/update", protectRoute, updateUserProfile);
 
 export default userRouter;
