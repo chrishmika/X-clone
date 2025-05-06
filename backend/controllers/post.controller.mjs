@@ -4,6 +4,7 @@ import { v2 as cloudinary } from "cloudinary";
 //models
 import Post from "../models/post.model.mjs";
 import User from "../models/user.model.mjs";
+import Notification from "../models/notification.model.mjs";
 
 export const createPost = async (req, res) => {
   try {
@@ -82,7 +83,14 @@ export const commentOnPost = async (req, res) => {
     post.comments.push(comment);
     await post.save();
 
-    res.status(200).json({ message: "comment was added" });
+    const notification = new Notification({
+      to: post.user,
+      from: userId,
+      type: "comment",
+    });
+    await notification.save();
+
+    res.status(200).json(post);
   } catch (error) {
     console.log(`error in create post ${error.message}`);
     res.status(500).json({ error: "internl server error on postController" });
@@ -92,20 +100,33 @@ export const commentOnPost = async (req, res) => {
 export const likeUnlikePost = async (req, res) => {
   try {
     const { id: postId } = req.params;
-    const post = await Post.findById(postId);
     const userId = req.user._id;
+
+    const post = await Post.findById(postId);
+
     if (!post) {
       return res.status(404).json({ error: "post not found" });
     }
 
-    if (post.likes.includes(userId)) {
-      post.likes.pull(userId);
-      await post.save();
-      return res.status(200).json(post);
-    }
+    const userLikedPost = post.likes.includes(userId);
+    if (userLikedPost) {
+      //unlike post
+      await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
 
-    post.likes.push(userId);
-    await post.save();
+      //await Notification.findOneAndDelete({});
+      res.status(200).json({ message: "post unliked sucessfull" });
+    } else {
+      //like post
+      await Post.updateOne({ _id: postId }, { $push: { likes: userId } });
+      res.status(200).json({ message: "post liked sucessfull" });
+
+      const notification = new Notification({
+        from: userId,
+        to: post.user,
+        type: "like",
+      });
+      await notification.save();
+    }
 
     return res.status(200).json(post);
   } catch (error) {
@@ -116,8 +137,46 @@ export const likeUnlikePost = async (req, res) => {
 
 export const updatePost = async (req, res) => {
   try {
+    const { text } = req.body;
+    let post = await Post.findById(req.params.id);
+
+    if (!text) {
+      return res.status(404).json({ error: "comment is empty" });
+    }
+
+    if (!post) {
+      return res.status(404).json({ error: "post not found" });
+    }
+
+    post.text = text;
+    await post.save();
+    res.status(201).json(post);
   } catch (error) {
     console.log(`error in create post ${error.message}`);
+    res.status(500).json({ error: "internl server error on postController" });
+  }
+};
+
+export const getAllPost = async (req, res) => {
+  try {
+    const posts = await Post.find()
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "user",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
+
+    if (posts.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    res.status(200).json(posts);
+  } catch (error) {
+    console.log(`error in getAllPost ${error.message}`);
     res.status(500).json({ error: "internl server error on postController" });
   }
 };
