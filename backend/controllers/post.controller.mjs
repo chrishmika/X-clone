@@ -240,3 +240,34 @@ export const getFollowingPosts = async (req, res) => {
     return res.status(500).json({ error: "internal server error on postController" });
   }
 };
+
+export const getUserPosts = async (req, res) => {
+  try {
+    const { username } = req.params;
+
+    const user = await User.find({ username }).select("_id");
+    if (!user) {
+      return res.status(404).json({ message: "no user found" });
+    }
+
+    const userPosts = await Post.find({ user })
+      .sort({ createdAt: -1 })
+      .populate({
+        path: "likes",
+        select: "-password",
+      })
+      .populate({
+        path: "comments.user",
+        select: "-password",
+      });
+
+    if (!userPosts) {
+      return res.status(404).json({ message: "no post found with followers" });
+    }
+
+    res.status(200).json(userPosts);
+  } catch (error) {
+    console.log("error in getUserPosts ", error.message);
+    return res.status(500).json({ error: `internal server error on postController` });
+  }
+};
