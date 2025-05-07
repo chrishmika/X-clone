@@ -112,25 +112,26 @@ export const likeUnlikePost = async (req, res) => {
     if (userLikedPost) {
       //unlike post
       await Post.updateOne({ _id: postId }, { $pull: { likes: userId } });
-
+      await User.updateOne({ _id: userId }, { $pull: { likedPosts: postId } });
       //await Notification.findOneAndDelete({});
       res.status(200).json({ message: "post unliked sucessfull" });
     } else {
       //like post
       await Post.updateOne({ _id: postId }, { $push: { likes: userId } });
-      res.status(200).json({ message: "post liked sucessfull" });
+      await User.updateOne({ _id: userId }, { $push: { likedPosts: postId } });
 
       const notification = new Notification({
         from: userId,
         to: post.user,
         type: "like",
       });
-      await notification.save();
-    }
 
-    return res.status(200).json(post);
+      await notification.save();
+
+      res.status(200).json({ message: "post liked sucessfull" });
+    }
   } catch (error) {
-    console.log(`error in create post ${error.message}`);
+    console.log(`error in like/unlike post ${error.message}`);
     res.status(500).json({ error: "internl server error on postController" });
   }
 };
@@ -178,5 +179,22 @@ export const getAllPost = async (req, res) => {
   } catch (error) {
     console.log(`error in getAllPost ${error.message}`);
     res.status(500).json({ error: "internl server error on postController" });
+  }
+};
+
+export const getLikedPosts = async (req, res) => {
+  try {
+    const { id } = req.params;
+    //const id = req.user._id; //actually params are not needed
+    const likedPosts = await User.findById(id).populate("likedPosts").select("likedPosts");
+
+    if (!likedPosts) {
+      return res.status(404).json({ message: "no liked posts" });
+    }
+
+    res.status(200).json(likedPosts);
+  } catch (error) {
+    console.log("error in getLikedPosts ", error.message);
+    return res.status(500).json({ error: "internal server error on postController" });
   }
 };
