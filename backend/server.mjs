@@ -5,9 +5,9 @@ import { v2 as cloudinary } from "cloudinary";
 
 import connectMongoDB from "./db/connectMongoDB.mjs";
 
-import userRouter from "./routes/user.routes.mjs";
-import authRouter from "./routes/auth.routes.mjs";
-import postRouter from "./routes/post.router.mjs";
+import userRouter from "./routes/user.route.mjs";
+import authRouter from "./routes/auth.route.mjs";
+import postRouter from "./routes/post.route.mjs";
 
 dotenv.config();
 cloudinary.config({
