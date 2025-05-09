@@ -74,8 +74,8 @@ const ProfilePage = () => {
                   </div>
                 )}
 
-                <input type="file" hidden ref={coverImgRef} onChange={(e) => handleImgChange(e, "coverImg")} />
-                <input type="file" hidden ref={profileImgRef} onChange={(e) => handleImgChange(e, "profileImg")} />
+                <input type="file" accept="image/*" hidden ref={coverImgRef} onChange={(e) => handleImgChange(e, "coverImg")} />
+                <input type="file" accept="image/*" hidden ref={profileImgRef} onChange={(e) => handleImgChange(e, "profileImg")} />
                 {/* USER AVATAR */}
                 <div className="avatar absolute -bottom-16 left-4">
                   <div className="w-32 rounded-full relative group/avatar">

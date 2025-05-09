@@ -34,14 +34,17 @@ const EditProfileModal = () => {
               <input type="text" placeholder="Full Name" className="flex-1 input border border-gray-700 rounded p-2 input-md" value={formData.fullName} name="fullName" onChange={handleInputChange} />
               <input type="text" placeholder="Username" className="flex-1 input border border-gray-700 rounded p-2 input-md" value={formData.username} name="username" onChange={handleInputChange} />
             </div>
+
             <div className="flex flex-wrap gap-2">
               <input type="email" placeholder="Email" className="flex-1 input border border-gray-700 rounded p-2 input-md" value={formData.email} name="email" onChange={handleInputChange} />
               <textarea placeholder="Bio" className="flex-1 input border border-gray-700 rounded p-2 input-md" value={formData.bio} name="bio" onChange={handleInputChange} />
             </div>
+
             <div className="flex flex-wrap gap-2">
               <input type="password" placeholder="Current Password" className="flex-1 input border border-gray-700 rounded p-2 input-md" value={formData.currentPassword} name="currentPassword" onChange={handleInputChange} />
               <input type="password" placeholder="New Password" className="flex-1 input border border-gray-700 rounded p-2 input-md" value={formData.newPassword} name="newPassword" onChange={handleInputChange} />
             </div>
+
             <input type="text" placeholder="Link" className="flex-1 input border border-gray-700 rounded p-2 input-md" value={formData.link} name="link" onChange={handleInputChange} />
             <button className="btn btn-primary rounded-full btn-sm text-white">Update</button>
           </form>

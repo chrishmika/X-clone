@@ -78,7 +78,6 @@ const Post = ({ post }) => {
                             <img src={comment.user.profileImg || "/avatar-placeholder.png"} />
                           </div>
                         </div>
-
                         <div className="flex flex-col">
                           <div className="flex items-center gap-1">
                             <span className="font-bold">{comment.user.fullName}</span>
@@ -87,6 +86,7 @@ const Post = ({ post }) => {
 
                           <div className="text-sm">{comment.text}</div>
                         </div>
+                        f
                       </div>
                     ))}
                   </div>
