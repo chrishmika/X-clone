@@ -9,6 +9,7 @@ const CreatePost = () => {
   const [text, setText] = useState("");
   const [img, setImg] = useState(null);
   const imgRef = useRef(null);
+  const queryClient = useQueryClient();
 
   const { data: authUser } = useQuery({
     queryKey: ["authUser"],
@@ -42,12 +43,11 @@ const CreatePost = () => {
     onSuccess: () => {
       setText("");
       setImg(null);
+
       toast.success("Post created Sucessfull");
       queryClient.invalidateQueries(["posts"]);
     },
   });
-
-  const queryClient = useQueryClient();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -56,11 +56,13 @@ const CreatePost = () => {
 
   const handleImgChange = (e) => {
     const file = e.target.files[0];
+
     if (file) {
       const render = new FileReader();
       render.onload = () => {
         setImg(render.result);
       };
+
       render.readAsDataURL(file);
     }
   };
@@ -85,6 +87,7 @@ const CreatePost = () => {
                 imgRef.current.value = null;
               }}
             />
+
             <img src={img} className="w-full mx-auto h-72 object-contain rounded" />
           </div>
         )}
@@ -94,9 +97,11 @@ const CreatePost = () => {
             <CiImageOn className="fill-primary w-6 h-6 cursor-pointer" onClick={() => imgRef.current.click()} />
             <BsEmojiSmileFill className="fill-primary w-5 h-5 cursor-pointer" />
           </div>
+
           <input type="file" accept="image/*" hidden ref={imgRef} onChange={handleImgChange} />
           <button className="btn btn-primary rounded-full btn-sm text-white px-4">{isPending ? "Posting..." : "Post"}</button>
         </div>
+
         {isError && <div className="text-red-500">{error.message}</div>}
       </form>
     </div>

@@ -13,9 +13,7 @@ const Post = ({ post }) => {
   const [comment, setComment] = useState("");
   const queryClient = useQueryClient();
 
-  const { data: authUser } = useQuery({
-    queryKey: ["authUser"],
-  });
+  const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 
   const { mutate: deletePost, isPending } = useMutation({
     mutationFn: async () => {
