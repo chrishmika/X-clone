@@ -107,8 +107,6 @@ const Post = ({ post }) => {
   const isLiked = post.likes.includes(authUser._id);
 
   const isMyPost = authUser._id === post.user._id;
-  console.log(authUser._id);
-  console.log(post._id);
 
   const formattedDate = formatPostDate(post.createdAt);
 
