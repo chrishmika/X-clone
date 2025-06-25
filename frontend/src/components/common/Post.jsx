@@ -58,19 +58,16 @@ const Post = ({ post }) => {
       // queryClient.invalidateQueries({ queryKey: ["posts"] });
       //insted ,update the cache directly for that post
 
-      queryClient.setQueriesData(["posts"], (oldData) => {
-        console.log(oldData);
-
-        return oldData.likedPosts.map((p) => {
-          console.log("p=>", p._id);
-
+      queryClient.setQueryData(["posts"], (oldData) => {
+        return oldData.map((p) => {
           if (p._id === post._id) {
-            return { ...p, likedPosts: updatedLikes };
+            return { ...p, likes: updatedLikes };
           }
           return p;
         });
       });
     },
+
     onError: (error) => {
       toast.error(error.message);
     },
@@ -172,7 +169,8 @@ const Post = ({ post }) => {
                   <h3 className="font-bold text-lg mb-4">COMMENTS</h3>
                   <div className="flex flex-col gap-3 max-h-60 overflow-auto">
                     {post.comments.length === 0 && <p className="text-sm text-slate-500">No comments yet 🤔 Be the first one 😉</p>}
-                    {post.comments.map((comment) => (
+
+                    {(post.comments || []).map((comment) => (
                       <div key={comment._id} className="flex gap-2 items-start">
                         <div className="avatar">
                           <div className="w-8 rounded-full">

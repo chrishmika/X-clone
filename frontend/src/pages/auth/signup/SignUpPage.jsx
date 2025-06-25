@@ -33,7 +33,6 @@ const SignupPage = () => {
 
         if (!res.ok) throw new Error(data.error || "Failed to create account");
 
-        console.log(data);
         return data;
       } catch (error) {
         console.log(error.message);
