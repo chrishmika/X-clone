@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development nodemon backend/server.mjs",
     "start": "cross-env NODE_ENV=production node backend/server.mjs",
+    "test": "echo \"No tests yet\" && exit 0",
     "build": "npm install && npm install --prefix frontend && npm run build --prefix frontend"
   },
   "keywords": [],
